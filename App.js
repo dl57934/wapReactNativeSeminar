@@ -1,30 +1,56 @@
-import React from "react";
-import { StyleSheet, Text, View } from "react-native";
-import GetLocation from "./GetLocation";
+import React, { Component, Fragment } from "react";
+import {
+  StyleSheet,
+  Text,
+  View,
+  ActivityIndicator,
+  StatusBar
+} from "react-native";
+import { Entypo } from "@expo/vector-icons";
+import getFineDustInfo from "./GetFineDustInfo";
 
-export default class App extends React.Component {
-  componentWillMount() {
-    GetLocation();
+export default class App extends Component {
+  state = { isReceiveData: false };
+
+  componentDidMount() {
+    this._GetLocation();
   }
+
   render() {
+    const { isReceiveData } = this.state;
+    console.log(isReceiveData);
     return (
       <View style={styles.container}>
-        <Text style={styles.title}>Awesome Find Dust</Text>
+        <StatusBar hidden={true} />
+        <ActivityIndicator size="large" color="black" />
+        {isReceiveData ? (
+          <Fragment>
+            <Entypo name="air" size={100} color="white" />
+            <Text style={styles.title}>Awesome Find Dust</Text>
+          </Fragment>
+        ) : (
+          <Text style={styles.title}>Reiceve data</Text>
+        )}
       </View>
     );
   }
+
+  _GetLocation = () => {
+    navigator.geolocation.getCurrentPosition(position => {
+      console.log(position);
+    });
+  };
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#90909090",
-    alignItems: "flex-start",
+    alignItems: "center",
     justifyContent: "flex-end"
   },
   title: {
     fontSize: 30,
-    marginLeft: "17%",
     marginBottom: "100%",
     color: "white",
     fontWeight: "bold"
