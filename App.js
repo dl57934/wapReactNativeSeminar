@@ -37,7 +37,11 @@ export default class App extends Component {
 
   _GetLocation = () => {
     navigator.geolocation.getCurrentPosition(position => {
-      console.log(position);
+      const {
+        coords: { latitude, longitude }
+      } = position;
+
+      const receive = getFineDustInfo({ lat: latitude, lon: longitude });
     });
   };
 }
