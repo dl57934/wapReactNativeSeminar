@@ -7,31 +7,42 @@ import {
   StatusBar
 } from "react-native";
 import { Entypo } from "@expo/vector-icons";
+import DustPage from "./dustPage";
 import getFineDustInfo from "./GetFineDustInfo";
 
 export default class App extends Component {
-  state = { isReceiveData: false };
+  state = {
+    isReceiveData: false,
+    positionInfo: "",
+    pollution: "",
+    weather: ""
+  };
 
   componentDidMount() {
     this._GetLocation();
   }
 
   render() {
-    const { isReceiveData } = this.state;
-    console.log(isReceiveData);
+    const { isReceiveData, pollution, weather, positionInfo } = this.state;
+
     return (
-      <View style={styles.container}>
+      <Fragment>
         <StatusBar hidden={true} />
-        <ActivityIndicator size="large" color="black" />
+
         {isReceiveData ? (
-          <Fragment>
-            <Entypo name="air" size={100} color="white" />
-            <Text style={styles.title}>Awesome Find Dust</Text>
-          </Fragment>
+          <DustPage
+            pollution={pollution}
+            weather={weather}
+            positionInfo={positionInfo}
+          />
         ) : (
-          <Text style={styles.title}>Reiceve data</Text>
+          <View style={styles.container}>
+            <Entypo name="air" size={100} color="white" />
+            <ActivityIndicator color="black" />
+            <Text style={styles.title}>Awesome Find Dust</Text>
+          </View>
         )}
-      </View>
+      </Fragment>
     );
   }
 
@@ -41,7 +52,15 @@ export default class App extends Component {
         coords: { latitude, longitude }
       } = position;
 
-      const receive = getFineDustInfo({ lat: latitude, lon: longitude });
+      getFineDustInfo({ lat: latitude, lon: longitude }).then(receive => {
+        const { weather, pollution, positionInfo } = receive;
+        this.setState({
+          isReceiveData: true,
+          positionInfo,
+          weather,
+          pollution
+        });
+      });
     });
   };
 }
