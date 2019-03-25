@@ -1,17 +1,34 @@
 import React, { Component, useState, useEffect } from "react";
 import { View, StyleSheet, Text } from "react-native";
+import {
+  MaterialCommunityIcons,
+  MaterialIcons,
+  AntDesign,
+  Feather
+} from "@expo/vector-icons";
 
 const DustPageView = ({ pollution: { aqius }, weather, positionInfo }) => {
   console.log(aqius, weather, positionInfo);
+  const { city, country } = positionInfo;
   const level = getLevel(aqius);
-  console.log(level);
+  console.log("level" + level);
   return (
     <View style={{ flex: 1, backgroundColor: backgroudColorArrays[level] }}>
       <View style={styles.upSection}>
-        <Text>red</Text>
+        <MaterialCommunityIcons name="tree" size={130} color="white" />
+        <Feather name="cloud" size={130} color="white" />
+        <AntDesign name="meh" size={130} color="white" />
+
+        {/* <Text style={styles.temperate}>{weather.tp} °C</Text> */}
       </View>
       <View style={styles.downSection}>
-        <Text>green</Text>
+        <AntDesign name="frowno" size={130} color="white" />
+        <AntDesign name="smileo" size={130} color="white" />
+        <MaterialCommunityIcons
+          name="emoticon-devil"
+          size={130}
+          color="white"
+        />
       </View>
     </View>
   );
@@ -25,7 +42,13 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center"
   },
-  downSection: { flex: 1, alignItems: "center", justifyContent: "center" }
+  downSection: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "blue"
+  },
+  temperate: { color: "white", fontWeight: "bold", fontSize: 50 }
 });
 
 const backgroudColorArrays = [
